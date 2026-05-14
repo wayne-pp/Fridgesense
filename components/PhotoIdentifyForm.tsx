@@ -1,14 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
-import type { IdentifyResponse } from "@/types";
+import { createId, getFoodItems, saveFoodItems } from "@/lib/storage";
+import type { FoodItem, IdentifyResponse } from "@/types";
 
 export default function PhotoIdentifyForm() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [result, setResult] = useState<IdentifyResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const previewUrl = useMemo(() => {
@@ -37,6 +40,7 @@ export default function PhotoIdentifyForm() {
 
     setIsLoading(true);
     setError(null);
+    setSaveMessage(null);
     setResult(null);
 
     const formData = new FormData();
@@ -88,6 +92,7 @@ export default function PhotoIdentifyForm() {
             setSelectedImage(event.target.files?.[0] ?? null);
             setResult(null);
             setError(null);
+            setSaveMessage(null);
           }}
           className="mt-3 block w-full cursor-pointer rounded-lg border border-emerald-200 bg-emerald-50 text-sm text-emerald-900 file:mr-4 file:border-0 file:bg-emerald-600 file:px-4 file:py-3 file:text-sm file:font-semibold file:text-white hover:file:bg-emerald-700 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-100"
         />
@@ -110,13 +115,13 @@ export default function PhotoIdentifyForm() {
         >
           {isLoading ? "Identifying..." : "Identify ingredients"}
         </button>
-      </form>
+    </form>
 
       {error ? (
         <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950 dark:text-red-200">
           {error}
         </p>
-      ) : null}
+  ) : null}
 
       {result ? (
         <div className="mt-5 rounded-2xl border border-emerald-200 bg-white/80 p-5 dark:border-emerald-800 dark:bg-emerald-900/30">
@@ -129,36 +134,71 @@ export default function PhotoIdentifyForm() {
             </p>
           ) : null}
           {result.items.length > 0 ? (
-            <ul className="mt-4 space-y-3">
-              {result.items.map((item, index) => (
-                <li
-                  key={`${item.name}-${index}`}
-                  className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100"
-                >
-                  <div className="font-medium">
-                    {item.name}
-                    {item.nameEn ? (
-                      <span className="font-normal text-emerald-600 dark:text-emerald-300">
-                        {" "}
-                        / {item.nameEn}
-                      </span>
+            <>
+              <ul className="mt-4 space-y-3">
+                {result.items.map((item, index) => (
+                  <li
+                    key={`${item.name}-${index}`}
+                    className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100"
+                  >
+                    <div className="font-medium">
+                      {item.name}
+                      {item.nameEn ? (
+                        <span className="font-normal text-emerald-600 dark:text-emerald-300">
+                          {" "}
+                          / {item.nameEn}
+                        </span>
+                      ) : null}
+                    </div>
+                    <div className="mt-1 text-xs text-emerald-600 dark:text-emerald-300">
+                      {item.category}
+                      {item.quantity ? ` · ${item.quantity}` : ""}
+                      {typeof item.confidence === "number"
+                        ? ` · ${Math.round(item.confidence * 100)}%`
+                        : ""}
+                    </div>
+                    {item.note ? (
+                      <p className="mt-1 text-xs text-emerald-700 dark:text-emerald-200">
+                        {item.note}
+                      </p>
                     ) : null}
-                  </div>
-                  <div className="mt-1 text-xs text-emerald-600 dark:text-emerald-300">
-                    {item.category}
-                    {item.quantity ? ` · ${item.quantity}` : ""}
-                    {typeof item.confidence === "number"
-                      ? ` · ${Math.round(item.confidence * 100)}%`
-                      : ""}
-                  </div>
-                  {item.note ? (
-                    <p className="mt-1 text-xs text-emerald-700 dark:text-emerald-200">
-                      {item.note}
-                    </p>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                onClick={() => {
+                  const now = Date.now();
+                  const existingItems = getFoodItems();
+                  const newItems: FoodItem[] = result.items.map((item) => ({
+                    id: createId(),
+                    name: item.name,
+                    nameEn: item.nameEn,
+                    quantity: item.quantity ?? "full",
+                    category: item.category,
+                    note: item.note,
+                    createdAt: now,
+                    updatedAt: now,
+                  }));
+
+                  saveFoodItems([...newItems, ...existingItems]);
+                  setSaveMessage(
+                    `Saved ${newItems.length} item${newItems.length === 1 ? "" : "s"} to your fridge.`,
+                  );
+                }}
+                className="mt-5 w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+              >
+                Save to fridge
+              </button>
+              {saveMessage ? (
+                <div className="mt-3 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
+                  {saveMessage}{" "}
+                  <Link href="/fridge" className="font-semibold underline">
+                    View fridge
+                  </Link>
+                </div>
+              ) : null}
+            </>
           ) : (
             <p className="mt-4 text-sm text-emerald-700 dark:text-emerald-200">
               No ingredients were identified. Try a clearer photo.
