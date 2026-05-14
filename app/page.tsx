@@ -1,9 +1,11 @@
+import AppNav from "@/components/AppNav";
 import PhotoIdentifyForm from "@/components/PhotoIdentifyForm";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-emerald-50 px-6 py-12 dark:bg-emerald-950">
-      <main className="flex w-full flex-col items-center text-center">
+      <main className="flex w-full max-w-3xl flex-col items-center text-center">
+        <AppNav />
         <h1 className="text-5xl font-bold tracking-tight text-emerald-900 dark:text-emerald-50 sm:text-7xl">
           🦞 FridgeSense
         </h1>
