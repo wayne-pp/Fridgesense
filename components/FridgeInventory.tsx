@@ -143,30 +143,30 @@ export default function FridgeInventory() {
           event.preventDefault();
           addManualItem(new Date().getTime());
         }}
-        className="rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm dark:border-emerald-800 dark:bg-emerald-900/30"
+        className="rounded-2xl border border-sky-200 bg-white/85 p-4 shadow-lg shadow-sky-900/5 dark:border-sky-800 dark:bg-slate-950/45 dark:shadow-black/20"
       >
-        <h2 className="text-lg font-semibold text-emerald-900 dark:text-emerald-50">
+        <h2 className="text-lg font-semibold text-sky-950 dark:text-sky-50">
           手动添加食材
         </h2>
         <div className="mt-4 grid gap-3">
-          <label className="text-sm font-medium text-emerald-900 dark:text-emerald-100">
+          <label className="text-sm font-medium text-sky-950 dark:text-sky-100">
             食材名称
             <input
               value={manualName}
               onChange={(event) => setManualName(event.target.value)}
               placeholder="例如：鸡蛋、青菜、牛奶"
-              className="mt-2 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 outline-none focus:border-emerald-500 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-50"
+              className="mt-2 w-full rounded-lg border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-950 outline-none focus:border-sky-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-50"
             />
           </label>
           <div className="grid gap-3 sm:grid-cols-2">
-            <label className="text-sm font-medium text-emerald-900 dark:text-emerald-100">
+            <label className="text-sm font-medium text-sky-950 dark:text-sky-100">
               分类
               <select
                 value={manualCategory}
                 onChange={(event) =>
                   setManualCategory(event.target.value as FoodCategory)
                 }
-                className="mt-2 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 outline-none focus:border-emerald-500 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-50"
+                className="mt-2 w-full rounded-lg border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-950 outline-none focus:border-sky-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-50"
               >
                 {categoryOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -175,14 +175,14 @@ export default function FridgeInventory() {
                 ))}
               </select>
             </label>
-            <label className="text-sm font-medium text-emerald-900 dark:text-emerald-100">
+            <label className="text-sm font-medium text-sky-950 dark:text-sky-100">
               库存状态
               <select
                 value={manualQuantity}
                 onChange={(event) =>
                   setManualQuantity(event.target.value as FoodQuantity)
                 }
-                className="mt-2 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 outline-none focus:border-emerald-500 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-50"
+                className="mt-2 w-full rounded-lg border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-950 outline-none focus:border-sky-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-50"
               >
                 {quantityOptions.map((quantity) => (
                   <option key={quantity} value={quantity}>
@@ -192,13 +192,13 @@ export default function FridgeInventory() {
               </select>
             </label>
           </div>
-          <label className="text-sm font-medium text-emerald-900 dark:text-emerald-100">
+          <label className="text-sm font-medium text-sky-950 dark:text-sky-100">
             备注（可选）
             <input
               value={manualNote}
               onChange={(event) => setManualNote(event.target.value)}
               placeholder="例如：已经开封、放在门架"
-              className="mt-2 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 outline-none focus:border-emerald-500 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-50"
+              className="mt-2 w-full rounded-lg border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-950 outline-none focus:border-sky-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-50"
             />
           </label>
         </div>
@@ -211,13 +211,13 @@ export default function FridgeInventory() {
         </button>
       </form>
 
-      <div className="mt-4 rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm dark:border-emerald-800 dark:bg-emerald-900/30">
+      <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50/80 p-4 shadow-lg shadow-amber-900/5 dark:border-amber-800 dark:bg-amber-950/35 dark:shadow-black/20">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-emerald-900 dark:text-emerald-50">
+            <h2 className="text-lg font-semibold text-amber-950 dark:text-amber-50">
               库存操作
             </h2>
-            <p className="mt-1 text-sm text-emerald-700 dark:text-emerald-200">
+            <p className="mt-1 text-sm text-amber-800 dark:text-amber-100">
               标记为“快没了”的食材会进入下一次购物清单。
             </p>
           </div>
@@ -230,7 +230,7 @@ export default function FridgeInventory() {
           </button>
         </div>
         {shoppingMessage ? (
-          <p className="mt-3 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
+          <p className="mt-3 rounded-lg bg-white/70 p-3 text-sm text-amber-800 dark:bg-amber-950/60 dark:text-amber-100">
             {shoppingMessage}{" "}
             <Link href="/shopping" className="font-semibold underline">
               查看购物清单
@@ -240,8 +240,8 @@ export default function FridgeInventory() {
       </div>
 
       {items.length === 0 ? (
-        <div className="mt-4 rounded-2xl border border-emerald-200 bg-white/80 p-6 text-center dark:border-emerald-800 dark:bg-emerald-900/30">
-          <p className="text-sm text-emerald-700 dark:text-emerald-200">
+        <div className="mt-4 rounded-2xl border border-sky-200 bg-white/85 p-6 text-center shadow-lg shadow-sky-900/5 dark:border-sky-800 dark:bg-slate-950/45 dark:shadow-black/20">
+          <p className="text-sm text-sky-800 dark:text-sky-100">
             冰箱库存还是空的。可以先从首页识别照片，也可以直接手动添加食材。
           </p>
         </div>
@@ -250,7 +250,7 @@ export default function FridgeInventory() {
           {items.map((item) => (
             <li
               key={item.id}
-              className="rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm dark:border-emerald-800 dark:bg-emerald-900/30"
+              className="rounded-2xl border border-white/80 bg-white/85 p-4 shadow-lg shadow-emerald-900/5 dark:border-white/10 dark:bg-slate-950/45 dark:shadow-black/20"
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>

@@ -93,8 +93,8 @@ export default function RecipeRecommendations() {
 
   return (
     <section className="mt-8">
-      <div className="rounded-2xl border border-emerald-200 bg-white/80 p-5 shadow-sm dark:border-emerald-800 dark:bg-emerald-900/30">
-        <h2 className="text-lg font-semibold text-emerald-900 dark:text-emerald-50">
+      <div className="rounded-2xl border border-rose-200 bg-white/85 p-5 shadow-lg shadow-rose-900/5 dark:border-rose-800 dark:bg-slate-950/45 dark:shadow-black/20">
+        <h2 className="text-lg font-semibold text-rose-950 dark:text-rose-50">
           选择今晚的方向
         </h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
@@ -109,8 +109,8 @@ export default function RecipeRecommendations() {
               }}
               className={`rounded-2xl border p-4 text-left transition ${
                 preference === option.value
-                  ? "border-emerald-600 bg-emerald-600 text-white"
-                  : "border-emerald-200 bg-emerald-50 text-emerald-900 hover:border-emerald-400 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
+                  ? "border-rose-600 bg-rose-600 text-white"
+                  : "border-rose-200 bg-rose-50 text-rose-950 hover:border-rose-400 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-100"
               }`}
             >
               <span className="block text-base font-semibold">
@@ -119,8 +119,8 @@ export default function RecipeRecommendations() {
               <span
                 className={`mt-1 block text-sm ${
                   preference === option.value
-                    ? "text-emerald-50"
-                    : "text-emerald-700 dark:text-emerald-300"
+                    ? "text-rose-50"
+                    : "text-rose-700 dark:text-rose-200"
                 }`}
               >
                 {option.description}
@@ -137,11 +137,11 @@ export default function RecipeRecommendations() {
           {isLoading ? "正在推荐..." : "推荐今晚吃什么"}
         </button>
         {foods.length === 0 ? (
-          <p className="mt-3 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
+          <p className="mt-3 rounded-lg bg-rose-50 p-3 text-sm text-rose-800 dark:bg-rose-950/60 dark:text-rose-100">
             还没有库存食材。请先在首页识别照片并保存到冰箱。
           </p>
         ) : (
-          <p className="mt-3 text-sm text-emerald-700 dark:text-emerald-200">
+          <p className="mt-3 text-sm text-rose-800 dark:text-rose-100">
             当前会参考 {foods.length} 个库存食材。
           </p>
         )}
@@ -154,7 +154,7 @@ export default function RecipeRecommendations() {
       ) : null}
 
       {result ? (
-        <div className="mt-5 rounded-2xl border border-emerald-200 bg-white/80 p-5 dark:border-emerald-800 dark:bg-emerald-900/30">
+        <div className="mt-5 rounded-2xl border border-white/80 bg-white/85 p-5 shadow-lg shadow-rose-900/5 dark:border-white/10 dark:bg-slate-950/45 dark:shadow-black/20">
           <h2 className="text-lg font-semibold text-emerald-900 dark:text-emerald-50">
             今晚推荐
           </h2>
@@ -167,7 +167,7 @@ export default function RecipeRecommendations() {
             {result.recipes.map((recipe, index) => (
               <article
                 key={`${recipe.title}-${index}`}
-                className="rounded-2xl bg-emerald-50 p-4 dark:bg-emerald-950"
+                className="rounded-2xl bg-rose-50 p-4 dark:bg-rose-950/50"
               >
                 <h3 className="text-lg font-semibold text-emerald-900 dark:text-emerald-50">
                   {recipe.title}

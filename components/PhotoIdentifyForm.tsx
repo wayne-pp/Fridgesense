@@ -166,13 +166,13 @@ export default function PhotoIdentifyForm() {
     <section className="mt-10 w-full max-w-xl text-left">
       <form
         onSubmit={handleSubmit}
-        className="rounded-3xl border border-emerald-200 bg-white/85 p-5 shadow-sm backdrop-blur dark:border-emerald-800 dark:bg-emerald-900/30"
+        className="rounded-3xl border border-white/80 bg-white/85 p-5 shadow-xl shadow-emerald-900/10 backdrop-blur dark:border-white/10 dark:bg-slate-950/45 dark:shadow-black/30"
       >
         <div>
-          <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-100">
+          <p className="text-sm font-semibold text-emerald-950 dark:text-emerald-100">
             添加冰箱照片
           </p>
-          <p className="mt-1 text-sm text-emerald-700 dark:text-emerald-200">
+          <p className="mt-1 text-sm text-sky-800 dark:text-sky-100">
             可以直接拍照，也可以从相册或文件里上传。
           </p>
         </div>
@@ -197,30 +197,30 @@ export default function PhotoIdentifyForm() {
           <button
             type="button"
             onClick={() => cameraInputRef.current?.click()}
-            className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-left transition hover:border-emerald-400 hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950 dark:hover:border-emerald-500 dark:hover:bg-emerald-900"
+            className="rounded-2xl border border-sky-200 bg-sky-50 p-4 text-left transition hover:border-sky-400 hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-950/70 dark:hover:border-sky-500 dark:hover:bg-sky-900"
           >
             <span className="text-2xl" aria-hidden="true">
               📷
             </span>
-            <span className="mt-3 block text-base font-semibold text-emerald-900 dark:text-emerald-50">
+            <span className="mt-3 block text-base font-semibold text-sky-950 dark:text-sky-50">
               拍照
             </span>
-            <span className="mt-1 block text-sm text-emerald-700 dark:text-emerald-300">
+            <span className="mt-1 block text-sm text-sky-700 dark:text-sky-200">
               手机上最方便
             </span>
           </button>
           <button
             type="button"
             onClick={() => uploadInputRef.current?.click()}
-            className="rounded-2xl border border-emerald-200 bg-white p-4 text-left transition hover:border-emerald-400 hover:bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/40 dark:hover:border-emerald-500 dark:hover:bg-emerald-900"
+            className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-left transition hover:border-amber-400 hover:bg-amber-100 dark:border-amber-800 dark:bg-amber-950/60 dark:hover:border-amber-500 dark:hover:bg-amber-900"
           >
             <span className="text-2xl" aria-hidden="true">
               🖼️
             </span>
-            <span className="mt-3 block text-base font-semibold text-emerald-900 dark:text-emerald-50">
+            <span className="mt-3 block text-base font-semibold text-amber-950 dark:text-amber-50">
               上传照片
             </span>
-            <span className="mt-1 block text-sm text-emerald-700 dark:text-emerald-300">
+            <span className="mt-1 block text-sm text-amber-700 dark:text-amber-200">
               从文件中选择
             </span>
           </button>
