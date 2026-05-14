@@ -10,10 +10,10 @@ export default function Home() {
           个人 AI 厨房工作台
         </p>
         <h1 className="mt-5 text-5xl font-bold tracking-tight text-emerald-950 dark:text-emerald-50 sm:text-7xl">
-          🦞 FridgeSense
+          FridgeSense
         </h1>
         <p className="mt-6 text-xl text-sky-800 dark:text-sky-100 sm:text-2xl">
-          AI 厨房助手
+          pp厨房
         </p>
         <p className="mt-3 text-sm font-medium text-emerald-700 dark:text-emerald-200 sm:text-base">
           上传冰箱照片，识别食材，管理库存和今晚菜单。
