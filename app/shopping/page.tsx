@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import FridgeInventory from "@/components/FridgeInventory";
+import ShoppingList from "@/components/ShoppingList";
 
-export default function FridgePage() {
+export default function ShoppingPage() {
   return (
     <div className="min-h-screen bg-emerald-50 px-6 py-10 dark:bg-emerald-950">
       <main className="mx-auto w-full max-w-3xl">
@@ -11,22 +11,22 @@ export default function FridgePage() {
             Home
           </Link>
           <Link
-            href="/shopping"
+            href="/fridge"
             className="text-emerald-700 underline dark:text-emerald-200"
           >
-            Shopping
+            Fridge
           </Link>
         </div>
         <div className="mt-8">
           <h1 className="text-4xl font-bold tracking-tight text-emerald-900 dark:text-emerald-50 sm:text-5xl">
-            Fridge Inventory
+            Shopping List
           </h1>
           <p className="mt-4 text-base text-emerald-700 dark:text-emerald-200">
-            Review saved ingredients, mark items that are running low, or remove
-            items you no longer have.
+            Buy low-stock ingredients, grouped by the store that usually makes
+            the most sense.
           </p>
         </div>
-        <FridgeInventory />
+        <ShoppingList />
       </main>
     </div>
   );
