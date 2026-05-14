@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { createId, getFoodItems, saveFoodItems } from "@/lib/storage";
 import type { FoodItem, IdentifyResponse } from "@/types";
@@ -13,6 +13,8 @@ export default function PhotoIdentifyForm() {
   const [error, setError] = useState<string | null>(null);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const uploadInputRef = useRef<HTMLInputElement>(null);
 
   const previewUrl = useMemo(() => {
     if (!selectedImage) {
@@ -29,6 +31,13 @@ export default function PhotoIdentifyForm() {
       }
     };
   }, [previewUrl]);
+
+  function handleImageChange(file: File | undefined) {
+    setSelectedImage(file ?? null);
+    setResult(null);
+    setError(null);
+    setSaveMessage(null);
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -74,28 +83,71 @@ export default function PhotoIdentifyForm() {
     <section className="mt-10 w-full max-w-xl text-left">
       <form
         onSubmit={handleSubmit}
-        className="rounded-2xl border border-emerald-200 bg-white/80 p-5 shadow-sm dark:border-emerald-800 dark:bg-emerald-900/30"
+        className="rounded-3xl border border-emerald-200 bg-white/85 p-5 shadow-sm backdrop-blur dark:border-emerald-800 dark:bg-emerald-900/30"
       >
-        <label
-          htmlFor="fridge-photo"
-          className="block text-sm font-medium text-emerald-900 dark:text-emerald-100"
-        >
-          Fridge photo
-        </label>
+        <div>
+          <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-100">
+            Add a fridge photo
+          </p>
+          <p className="mt-1 text-sm text-emerald-700 dark:text-emerald-200">
+            Take a new photo or upload one from your device.
+          </p>
+        </div>
+
         <input
-          id="fridge-photo"
-          name="image"
+          ref={cameraInputRef}
           type="file"
           accept="image/jpeg,image/png,image/gif,image/webp"
           capture="environment"
-          onChange={(event) => {
-            setSelectedImage(event.target.files?.[0] ?? null);
-            setResult(null);
-            setError(null);
-            setSaveMessage(null);
-          }}
-          className="mt-3 block w-full cursor-pointer rounded-lg border border-emerald-200 bg-emerald-50 text-sm text-emerald-900 file:mr-4 file:border-0 file:bg-emerald-600 file:px-4 file:py-3 file:text-sm file:font-semibold file:text-white hover:file:bg-emerald-700 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-100"
+          onChange={(event) => handleImageChange(event.target.files?.[0])}
+          className="hidden"
         />
+        <input
+          ref={uploadInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/gif,image/webp"
+          onChange={(event) => handleImageChange(event.target.files?.[0])}
+          className="hidden"
+        />
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => cameraInputRef.current?.click()}
+            className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-left transition hover:border-emerald-400 hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950 dark:hover:border-emerald-500 dark:hover:bg-emerald-900"
+          >
+            <span className="text-2xl" aria-hidden="true">
+              📷
+            </span>
+            <span className="mt-3 block text-base font-semibold text-emerald-900 dark:text-emerald-50">
+              Take photo
+            </span>
+            <span className="mt-1 block text-sm text-emerald-700 dark:text-emerald-300">
+              Best on phone
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => uploadInputRef.current?.click()}
+            className="rounded-2xl border border-emerald-200 bg-white p-4 text-left transition hover:border-emerald-400 hover:bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/40 dark:hover:border-emerald-500 dark:hover:bg-emerald-900"
+          >
+            <span className="text-2xl" aria-hidden="true">
+              🖼️
+            </span>
+            <span className="mt-3 block text-base font-semibold text-emerald-900 dark:text-emerald-50">
+              Upload photo
+            </span>
+            <span className="mt-1 block text-sm text-emerald-700 dark:text-emerald-300">
+              Choose from files
+            </span>
+          </button>
+        </div>
+
+        {selectedImage ? (
+          <p className="mt-4 truncate rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
+            Selected: {selectedImage.name}
+          </p>
+        ) : null}
 
         {previewUrl ? (
           <Image
@@ -104,7 +156,7 @@ export default function PhotoIdentifyForm() {
             width={800}
             height={450}
             unoptimized
-            className="mt-4 max-h-72 w-full rounded-xl object-cover"
+            className="mt-4 max-h-72 w-full rounded-2xl object-cover"
           />
         ) : null}
 
@@ -115,13 +167,13 @@ export default function PhotoIdentifyForm() {
         >
           {isLoading ? "Identifying..." : "Identify ingredients"}
         </button>
-    </form>
+      </form>
 
       {error ? (
         <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950 dark:text-red-200">
           {error}
         </p>
-  ) : null}
+      ) : null}
 
       {result ? (
         <div className="mt-5 rounded-2xl border border-emerald-200 bg-white/80 p-5 dark:border-emerald-800 dark:bg-emerald-900/30">
@@ -168,7 +220,7 @@ export default function PhotoIdentifyForm() {
               <button
                 type="button"
                 onClick={() => {
-                  const now = Date.now();
+                  const now = new Date().getTime();
                   const existingItems = getFoodItems();
                   const newItems: FoodItem[] = result.items.map((item) => ({
                     id: createId(),
