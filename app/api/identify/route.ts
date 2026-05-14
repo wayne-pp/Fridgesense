@@ -14,6 +14,21 @@ function isSupportedImageType(value: string): value is SupportedImageMediaType {
   return supportedImageTypes.includes(value as SupportedImageMediaType);
 }
 
+function getFriendlyErrorMessage(error: unknown) {
+  const message =
+    error instanceof Error ? error.message : "Failed to identify image.";
+
+  if (message.includes("exceeds 5 MB") || message.includes("too large")) {
+    return "This photo is too large for Claude Vision. Try the compressed upload again or choose a smaller photo.";
+  }
+
+  if (message.includes("invalid_request_error")) {
+    return "Claude could not process this image. Try a clearer or smaller photo.";
+  }
+
+  return message;
+}
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
@@ -45,9 +60,6 @@ export async function POST(request: Request) {
 
     return Response.json(result);
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Failed to identify image.";
-
-    return Response.json({ error: message }, { status: 500 });
+    return Response.json({ error: getFriendlyErrorMessage(error) }, { status: 500 });
   }
 }

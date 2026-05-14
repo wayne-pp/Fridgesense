@@ -7,11 +7,84 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createId, getFoodItems, saveFoodItems } from "@/lib/storage";
 import type { FoodItem, IdentifyResponse } from "@/types";
 
+const maxClaudeImageBytes = 4.5 * 1024 * 1024;
+const maxImageDimension = 1600;
+
+async function loadImage(file: File) {
+  const imageUrl = URL.createObjectURL(file);
+
+  try {
+    const image = document.createElement("img");
+    image.src = imageUrl;
+    await image.decode();
+    return image;
+  } finally {
+    URL.revokeObjectURL(imageUrl);
+  }
+}
+
+function getScaledSize(width: number, height: number) {
+  const largestSide = Math.max(width, height);
+
+  if (largestSide <= maxImageDimension) {
+    return { width, height };
+  }
+
+  const scale = maxImageDimension / largestSide;
+  return {
+    width: Math.round(width * scale),
+    height: Math.round(height * scale),
+  };
+}
+
+function canvasToBlob(canvas: HTMLCanvasElement, quality: number) {
+  return new Promise<Blob | null>((resolve) => {
+    canvas.toBlob(resolve, "image/jpeg", quality);
+  });
+}
+
+async function compressImageForClaude(file: File) {
+  if (file.size <= maxClaudeImageBytes) {
+    return { file, wasCompressed: false };
+  }
+
+  const image = await loadImage(file);
+  const { width, height } = getScaledSize(image.naturalWidth, image.naturalHeight);
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    throw new Error("Could not prepare this image. Please try another photo.");
+  }
+
+  canvas.width = width;
+  canvas.height = height;
+  context.drawImage(image, 0, 0, width, height);
+
+  for (const quality of [0.82, 0.72, 0.62, 0.52]) {
+    const blob = await canvasToBlob(canvas, quality);
+
+    if (blob && blob.size <= maxClaudeImageBytes) {
+      return {
+        file: new File([blob], "fridgesense-fridge-photo.jpg", {
+          type: "image/jpeg",
+        }),
+        wasCompressed: true,
+      };
+    }
+  }
+
+  throw new Error(
+    "This photo is still too large after compression. Try taking a closer, simpler photo.",
+  );
+}
+
 export default function PhotoIdentifyForm() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [result, setResult] = useState<IdentifyResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [imageMessage, setImageMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const uploadInputRef = useRef<HTMLInputElement>(null);
@@ -37,6 +110,11 @@ export default function PhotoIdentifyForm() {
     setResult(null);
     setError(null);
     setSaveMessage(null);
+    setImageMessage(
+      file && file.size > maxClaudeImageBytes
+        ? "Large photo selected. FridgeSense will compress it before sending to Claude."
+        : null,
+    );
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -52,10 +130,15 @@ export default function PhotoIdentifyForm() {
     setSaveMessage(null);
     setResult(null);
 
-    const formData = new FormData();
-    formData.append("image", selectedImage);
-
     try {
+      const { file, wasCompressed } = await compressImageForClaude(selectedImage);
+      const formData = new FormData();
+      formData.append("image", file);
+
+      if (wasCompressed) {
+        setImageMessage("Photo compressed for Claude Vision.");
+      }
+
       const response = await fetch("/api/identify", {
         method: "POST",
         body: formData,
@@ -146,6 +229,12 @@ export default function PhotoIdentifyForm() {
         {selectedImage ? (
           <p className="mt-4 truncate rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
             Selected: {selectedImage.name}
+          </p>
+        ) : null}
+
+        {imageMessage ? (
+          <p className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
+            {imageMessage}
           </p>
         ) : null}
 
