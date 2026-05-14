@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 
+import { aiModels } from "@/lib/models";
 import type { FoodItem, RecipePreference, RecipeResponse, IdentifyResponse } from "@/types";
 
 export type SupportedImageMediaType =
@@ -106,7 +107,7 @@ export async function identifyFoodFromImage({
   }
 
   const message = await anthropic.messages.create({
-    model: "claude-sonnet-4-5",
+    model: aiModels.vision,
     max_tokens: 1200,
     messages: [
       {
@@ -182,7 +183,7 @@ ${foodList}
 `.trim();
 
   const message = await anthropic.messages.create({
-    model: "claude-sonnet-4-5",
+    model: aiModels.recipes,
     max_tokens: 1600,
     messages: [
       {
