@@ -54,7 +54,7 @@ async function compressImageForClaude(file: File) {
   const context = canvas.getContext("2d");
 
   if (!context) {
-    throw new Error("Could not prepare this image. Please try another photo.");
+    throw new Error("无法处理这张图片，请换一张照片再试。");
   }
 
   canvas.width = width;
@@ -75,7 +75,7 @@ async function compressImageForClaude(file: File) {
   }
 
   throw new Error(
-    "This photo is still too large after compression. Try taking a closer, simpler photo.",
+    "这张照片压缩后仍然太大。请拍一张更近、更简单的照片再试。",
   );
 }
 
@@ -112,7 +112,7 @@ export default function PhotoIdentifyForm() {
     setSaveMessage(null);
     setImageMessage(
       file && file.size > maxClaudeImageBytes
-        ? "Large photo selected. FridgeSense will compress it before sending to Claude."
+        ? "照片较大，FridgeSense 会先压缩再发送给 Claude。"
         : null,
     );
   }
@@ -121,7 +121,7 @@ export default function PhotoIdentifyForm() {
     event.preventDefault();
 
     if (!selectedImage) {
-      setError("Please choose a fridge photo first.");
+      setError("请先选择一张冰箱照片。");
       return;
     }
 
@@ -136,7 +136,7 @@ export default function PhotoIdentifyForm() {
       formData.append("image", file);
 
       if (wasCompressed) {
-        setImageMessage("Photo compressed for Claude Vision.");
+        setImageMessage("照片已压缩，正在发送给 Claude Vision。");
       }
 
       const response = await fetch("/api/identify", {
@@ -147,7 +147,7 @@ export default function PhotoIdentifyForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error ?? "Failed to identify ingredients.");
+        throw new Error(data.error ?? "识别食材失败，请稍后再试。");
       }
 
       setResult(data as IdentifyResponse);
@@ -155,7 +155,7 @@ export default function PhotoIdentifyForm() {
       setError(
         caughtError instanceof Error
           ? caughtError.message
-          : "Failed to identify ingredients.",
+          : "识别食材失败，请稍后再试。",
       );
     } finally {
       setIsLoading(false);
@@ -170,10 +170,10 @@ export default function PhotoIdentifyForm() {
       >
         <div>
           <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-100">
-            Add a fridge photo
+            添加冰箱照片
           </p>
           <p className="mt-1 text-sm text-emerald-700 dark:text-emerald-200">
-            Take a new photo or upload one from your device.
+            可以直接拍照，也可以从相册或文件里上传。
           </p>
         </div>
 
@@ -203,10 +203,10 @@ export default function PhotoIdentifyForm() {
               📷
             </span>
             <span className="mt-3 block text-base font-semibold text-emerald-900 dark:text-emerald-50">
-              Take photo
+              拍照
             </span>
             <span className="mt-1 block text-sm text-emerald-700 dark:text-emerald-300">
-              Best on phone
+              手机上最方便
             </span>
           </button>
           <button
@@ -218,17 +218,17 @@ export default function PhotoIdentifyForm() {
               🖼️
             </span>
             <span className="mt-3 block text-base font-semibold text-emerald-900 dark:text-emerald-50">
-              Upload photo
+              上传照片
             </span>
             <span className="mt-1 block text-sm text-emerald-700 dark:text-emerald-300">
-              Choose from files
+              从文件中选择
             </span>
           </button>
         </div>
 
         {selectedImage ? (
           <p className="mt-4 truncate rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
-            Selected: {selectedImage.name}
+            已选择：{selectedImage.name}
           </p>
         ) : null}
 
@@ -254,7 +254,7 @@ export default function PhotoIdentifyForm() {
           disabled={isLoading || !selectedImage}
           className="mt-5 w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-300 dark:disabled:bg-emerald-800"
         >
-          {isLoading ? "Identifying..." : "Identify ingredients"}
+          {isLoading ? "正在识别..." : "识别食材"}
         </button>
       </form>
 
@@ -267,7 +267,7 @@ export default function PhotoIdentifyForm() {
       {result ? (
         <div className="mt-5 rounded-2xl border border-emerald-200 bg-white/80 p-5 dark:border-emerald-800 dark:bg-emerald-900/30">
           <h2 className="text-lg font-semibold text-emerald-900 dark:text-emerald-50">
-            Identified ingredients
+            识别结果
           </h2>
           {result.summary ? (
             <p className="mt-2 text-sm text-emerald-700 dark:text-emerald-200">
@@ -324,25 +324,25 @@ export default function PhotoIdentifyForm() {
 
                   saveFoodItems([...newItems, ...existingItems]);
                   setSaveMessage(
-                    `Saved ${newItems.length} item${newItems.length === 1 ? "" : "s"} to your fridge.`,
+                    `已保存 ${newItems.length} 个食材到冰箱。`,
                   );
                 }}
                 className="mt-5 w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
               >
-                Save to fridge
+                保存到冰箱
               </button>
               {saveMessage ? (
                 <div className="mt-3 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
                   {saveMessage}{" "}
                   <Link href="/fridge" className="font-semibold underline">
-                    View fridge
+                    查看冰箱
                   </Link>
                 </div>
               ) : null}
             </>
           ) : (
             <p className="mt-4 text-sm text-emerald-700 dark:text-emerald-200">
-              No ingredients were identified. Try a clearer photo.
+              没有识别到食材。可以换一张更清楚的照片再试。
             </p>
           )}
         </div>

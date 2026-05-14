@@ -7,19 +7,25 @@ export default function AppNav() {
         href="/"
         className="rounded-full px-4 py-2 text-emerald-700 transition hover:bg-emerald-100 dark:text-emerald-100 dark:hover:bg-emerald-800"
       >
-        Home
+        首页
       </Link>
       <Link
         href="/fridge"
         className="rounded-full px-4 py-2 text-emerald-700 transition hover:bg-emerald-100 dark:text-emerald-100 dark:hover:bg-emerald-800"
       >
-        Fridge
+        冰箱
       </Link>
       <Link
         href="/shopping"
         className="rounded-full px-4 py-2 text-emerald-700 transition hover:bg-emerald-100 dark:text-emerald-100 dark:hover:bg-emerald-800"
       >
-        Shopping
+        购物清单
+      </Link>
+      <Link
+        href="/recipes"
+        className="rounded-full px-4 py-2 text-emerald-700 transition hover:bg-emerald-100 dark:text-emerald-100 dark:hover:bg-emerald-800"
+      >
+        今晚吃什么
       </Link>
     </nav>
   );

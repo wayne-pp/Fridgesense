@@ -14,6 +14,11 @@ import { suggestStoreForItem } from "@/lib/stores";
 import type { FoodItem, FoodQuantity, ShoppingItem } from "@/types";
 
 const quantityOptions: FoodQuantity[] = ["full", "half", "low"];
+const quantityLabels: Record<FoodQuantity, string> = {
+  full: "充足",
+  half: "一半",
+  low: "快没了",
+};
 
 export default function FridgeInventory() {
   const [items, setItems] = useState<FoodItem[]>(() => getFoodItems());
@@ -65,18 +70,18 @@ export default function FridgeInventory() {
       }));
 
     if (lowItems.length === 0) {
-      setShoppingMessage("No low items yet. Mark ingredients as low first.");
+      setShoppingMessage("还没有快没了的食材。请先把需要补货的食材标记为快没了。");
       return;
     }
 
     if (newShoppingItems.length === 0) {
-      setShoppingMessage("Your low items are already on the shopping list.");
+      setShoppingMessage("快没了的食材已经在购物清单里了。");
       return;
     }
 
     saveShoppingItems([...newShoppingItems, ...existingShoppingItems]);
     setShoppingMessage(
-      `Added ${newShoppingItems.length} item${newShoppingItems.length === 1 ? "" : "s"} to your shopping list.`,
+      `已添加 ${newShoppingItems.length} 个食材到购物清单。`,
     );
   }
 
@@ -84,8 +89,7 @@ export default function FridgeInventory() {
     return (
       <div className="mt-8 rounded-2xl border border-emerald-200 bg-white/80 p-6 text-center dark:border-emerald-800 dark:bg-emerald-900/30">
         <p className="text-sm text-emerald-700 dark:text-emerald-200">
-          Your fridge is empty. Upload a fridge photo on the home page, then
-          save the identified ingredients here.
+          冰箱库存还是空的。先回到首页上传冰箱照片，再把识别出的食材保存到这里。
         </p>
       </div>
     );
@@ -97,10 +101,10 @@ export default function FridgeInventory() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-lg font-semibold text-emerald-900 dark:text-emerald-50">
-              Inventory actions
+              库存操作
             </h2>
             <p className="mt-1 text-sm text-emerald-700 dark:text-emerald-200">
-              Low items become your next shopping list.
+              标记为“快没了”的食材会进入下一次购物清单。
             </p>
           </div>
           <button
@@ -108,14 +112,14 @@ export default function FridgeInventory() {
             onClick={() => generateShoppingList(new Date().getTime())}
             className="rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
           >
-            Generate shopping list
+            生成购物清单
           </button>
         </div>
         {shoppingMessage ? (
           <p className="mt-3 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
             {shoppingMessage}{" "}
             <Link href="/shopping" className="font-semibold underline">
-              View shopping list
+              查看购物清单
             </Link>
           </p>
         ) : null}
@@ -139,7 +143,7 @@ export default function FridgeInventory() {
                   ) : null}
                 </h2>
                 <p className="mt-1 text-sm text-emerald-700 dark:text-emerald-200">
-                  {item.category} · {item.quantity}
+                  {item.category} · {quantityLabels[item.quantity]}
                 </p>
                 {item.note ? (
                   <p className="mt-2 text-sm text-emerald-600 dark:text-emerald-300">
@@ -152,7 +156,7 @@ export default function FridgeInventory() {
                 onClick={() => deleteItem(item.id)}
                 className="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-950"
               >
-                Delete
+                删除
               </button>
             </div>
             <div className="mt-4 grid grid-cols-3 gap-2">
@@ -169,7 +173,7 @@ export default function FridgeInventory() {
                       : "border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-700 dark:text-emerald-100 dark:hover:bg-emerald-900"
                   }`}
                 >
-                  {quantity}
+                  {quantityLabels[quantity]}
                 </button>
               ))}
             </div>

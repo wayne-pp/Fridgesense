@@ -8,11 +8,10 @@ export default function FridgePage() {
         <AppNav />
         <div className="mt-8">
           <h1 className="text-4xl font-bold tracking-tight text-emerald-900 dark:text-emerald-50 sm:text-5xl">
-            Fridge Inventory
+            冰箱库存
           </h1>
           <p className="mt-4 text-base text-emerald-700 dark:text-emerald-200">
-            Review saved ingredients, mark items that are running low, or remove
-            items you no longer have.
+            查看已保存的食材，调整库存状态，或者删除已经用完的东西。
           </p>
         </div>
         <FridgeInventory />

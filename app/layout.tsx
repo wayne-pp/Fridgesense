@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "FridgeSense",
-  description: "AI-powered kitchen assistant",
+  description: "AI 厨房助手",
 };
 
 export default function RootLayout({

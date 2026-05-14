@@ -10,10 +10,10 @@ export default function Home() {
           🦞 FridgeSense
         </h1>
         <p className="mt-6 text-xl text-emerald-700 dark:text-emerald-200 sm:text-2xl">
-          AI-powered kitchen assistant
+          AI 厨房助手
         </p>
         <p className="mt-3 text-sm font-medium text-emerald-600 dark:text-emerald-400 sm:text-base">
-          Upload a fridge photo to identify ingredients.
+          上传冰箱照片，识别食材，管理库存和今晚菜单。
         </p>
         <PhotoIdentifyForm />
       </main>

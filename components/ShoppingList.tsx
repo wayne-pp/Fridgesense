@@ -32,8 +32,7 @@ export default function ShoppingList() {
     return (
       <div className="mt-8 rounded-2xl border border-emerald-200 bg-white/80 p-6 text-center dark:border-emerald-800 dark:bg-emerald-900/30">
         <p className="text-sm text-emerald-700 dark:text-emerald-200">
-          Your shopping list is empty. Mark fridge items as low, then generate a
-          shopping list from the fridge page.
+          购物清单还是空的。请先在冰箱页面把食材标记为快没了，然后生成购物清单。
         </p>
       </div>
     );
@@ -50,7 +49,7 @@ export default function ShoppingList() {
       <div className="rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm dark:border-emerald-800 dark:bg-emerald-900/30">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-emerald-700 dark:text-emerald-200">
-            {purchasedCount} of {items.length} purchased
+            已购买 {purchasedCount} / {items.length}
           </p>
           <button
             type="button"
@@ -58,7 +57,7 @@ export default function ShoppingList() {
             disabled={purchasedCount === 0}
             className="rounded-lg border border-emerald-300 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-emerald-700 dark:text-emerald-100 dark:hover:bg-emerald-900"
           >
-            Clear purchased
+            清除已购买
           </button>
         </div>
       </div>

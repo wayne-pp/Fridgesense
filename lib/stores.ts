@@ -24,7 +24,7 @@ export const stores: StoreConfig[] = [
   },
   {
     id: "hmart99",
-    name: "99 Ranch",
+    name: "99 大华",
     keywords: ["rice", "noodle", "tofu", "bok choy", "soy sauce", "dumpling"],
   },
   {

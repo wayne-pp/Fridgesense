@@ -16,14 +16,14 @@ function isSupportedImageType(value: string): value is SupportedImageMediaType {
 
 function getFriendlyErrorMessage(error: unknown) {
   const message =
-    error instanceof Error ? error.message : "Failed to identify image.";
+    error instanceof Error ? error.message : "识别图片失败，请稍后再试。";
 
   if (message.includes("exceeds 5 MB") || message.includes("too large")) {
-    return "This photo is too large for Claude Vision. Try the compressed upload again or choose a smaller photo.";
+    return "这张照片对 Claude Vision 来说还是太大。请重新上传，或换一张更小、更清楚的照片。";
   }
 
   if (message.includes("invalid_request_error")) {
-    return "Claude could not process this image. Try a clearer or smaller photo.";
+    return "Claude 暂时无法处理这张图片。请换一张更清楚或更小的照片。";
   }
 
   return message;
@@ -35,19 +35,19 @@ export async function POST(request: Request) {
     const image = formData.get("image");
 
     if (!(image instanceof File)) {
-      return Response.json({ error: "Please upload an image." }, { status: 400 });
+      return Response.json({ error: "请先上传一张图片。" }, { status: 400 });
     }
 
     if (!isSupportedImageType(image.type)) {
       return Response.json(
-        { error: "Please upload a JPG, PNG, GIF, or WebP image." },
+        { error: "请上传 JPG、PNG、GIF 或 WebP 格式的图片。" },
         { status: 400 },
       );
     }
 
     if (image.size > maxImageSize) {
       return Response.json(
-        { error: "Image is too large. Please upload an image under 5 MB." },
+        { error: "图片太大了，请上传小于 5 MB 的图片。" },
         { status: 400 },
       );
     }

@@ -10,6 +10,8 @@ export type FoodCategory =
 
 export type StoreId = "costco" | "walmart" | "target" | "hmart99" | "other";
 
+export type RecipePreference = "balanced" | "fitness" | "low_calorie";
+
 export type FoodItem = {
   id: string;
   name: string;
@@ -47,12 +49,19 @@ export type RecipeSuggestion = {
   title: string;
   description: string;
   ingredients: string[];
+  usedFoodNames?: string[];
   steps?: string[];
+  preference?: RecipePreference;
   createdAt: number;
   updatedAt: number;
 };
 
 export type IdentifyResponse = {
   items: IdentifiedFoodItem[];
+  summary?: string;
+};
+
+export type RecipeResponse = {
+  recipes: Omit<RecipeSuggestion, "id" | "createdAt" | "updatedAt">[];
   summary?: string;
 };
