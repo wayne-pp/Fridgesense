@@ -3,7 +3,7 @@ import PhotoIdentifyForm from "@/components/PhotoIdentifyForm";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[linear-gradient(135deg,#ecfdf5_0%,#eff6ff_48%,#fff7ed_100%)] px-6 py-12 dark:bg-[linear-gradient(135deg,#052e24_0%,#082f49_52%,#431407_100%)]">
+    <div className="home-hero-bg flex min-h-screen items-center justify-center px-6 py-12">
       <main className="flex w-full max-w-3xl flex-col items-center text-center">
         <AppNav />
         <p className="mt-10 rounded-full border border-emerald-200 bg-white/70 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-200">
