@@ -25,7 +25,7 @@ Return only valid JSON with this shape:
 {
   "items": [
     {
-      "name": "中文或常用名称",
+      "name": "common ingredient name",
       "nameEn": "English name if useful",
       "category": "protein | veggie | fruit | dairy | pantry | other",
       "quantity": "full | half | low",
@@ -38,6 +38,8 @@ Return only valid JSON with this shape:
 
 Rules:
 - Only include food or kitchen ingredients you can reasonably see.
+- Exclude toys, decorations, containers, utensils, packaging, and any object that is not food.
+- If an object is not food, do not return it at all.
 - If unsure, set a lower confidence.
 - Do not include nutrition, prices, expiration dates, or shopping suggestions.
 `.trim();
@@ -54,9 +56,16 @@ function parseIdentifyResponse(rawText: string): IdentifyResponse {
   const jsonMatch = rawText.match(/\{[\s\S]*\}/);
   const jsonText = jsonMatch?.[0] ?? rawText;
   const parsed = JSON.parse(jsonText) as IdentifyResponse;
+  const items = Array.isArray(parsed.items) ? parsed.items : [];
 
   return {
-    items: Array.isArray(parsed.items) ? parsed.items : [],
+    items: items.filter((item) => {
+      const text = `${item.name} ${item.nameEn ?? ""} ${item.note ?? ""}`
+        .toLowerCase()
+        .trim();
+
+      return !text.includes("not food");
+    }),
     summary: parsed.summary,
   };
 }
