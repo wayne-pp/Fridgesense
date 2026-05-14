@@ -10,7 +10,7 @@ export default function Home() {
           个人 AI 厨房工作台
         </p>
         <h1 className="mt-5 text-5xl font-bold tracking-tight text-emerald-950 dark:text-emerald-50 sm:text-7xl">
-          FridgeSense
+          🦞 FridgeSense
         </h1>
         <p className="mt-6 text-xl text-sky-800 dark:text-sky-100 sm:text-2xl">
           pp厨房
